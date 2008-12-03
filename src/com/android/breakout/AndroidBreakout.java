@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.content.res.Configuration;
 
 public class AndroidBreakout extends Activity {
     private GraphView mGraphView;
@@ -31,6 +32,11 @@ public class AndroidBreakout extends Activity {
     protected void onStop() {
         mSensorManager.unregisterListener(mGraphView);
         super.onStop();
+    }
+    
+    @Override
+	public void onConfigurationChanged(Configuration newConfig) {
+    	super.onConfigurationChanged(newConfig);
     }
 /*
     public void onSensorChanged(int sensor, float[] values) {

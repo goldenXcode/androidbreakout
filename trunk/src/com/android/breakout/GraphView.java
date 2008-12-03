@@ -55,7 +55,7 @@ public class GraphView extends View implements SensorListener
                     0xFF0000FF });
         mDrawable.setShape(GradientDrawable.LINEAR_GRADIENT);
         mDrawable.setCornerRadius(3);
-        mDrawable.setStroke(2, 0xFF000000);
+        mDrawable.setStroke(2, 0xFF0040FF);
     }
     
     @Override
@@ -77,7 +77,7 @@ public class GraphView extends View implements SensorListener
                 final Paint paint = mPaint;
                 final Path path = mPath;
 
-//                canvas.drawBitmap(mBitmap, 0, 0, null);
+                canvas.drawBitmap(mBitmap, 0, 0, null);
                 drawPaddle(canvas, paint);
             } 
         }
@@ -96,7 +96,7 @@ public class GraphView extends View implements SensorListener
                 final Canvas canvas = mCanvas;
                 final Paint paint = mPaint;
                	if (sensor == SensorManager.SENSOR_ACCELEROMETER) {
-               		mPaddleX += (int)(values[0] * 2.0f);
+               		mPaddleX -= (int)(values[SensorManager.RAW_DATA_Y] * 2.0f);
                		if (mPaddleX < 0)
                			mPaddleX = 0;
                		if (mPaddleX > ((int)mWidth-mPaddleWidth))

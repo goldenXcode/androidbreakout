@@ -35,6 +35,8 @@ public class GraphView extends View implements SensorListener
     private int		mPaddleWidth = 80;
     private int		mPaddleHeight = 15;
     private int		mPaddleColor = Color.argb(255, 64, 64, 128);
+    private final int mAccelMultiplier = 3;
+    private final int mNudgeValue = 8;
     private GradientDrawable mDrawable;
     
     public GraphView(Context context) {
@@ -98,12 +100,12 @@ public class GraphView extends View implements SensorListener
                	if (sensor == SensorManager.SENSOR_ACCELEROMETER) {
                		int accel = (int)(values[SensorManager.RAW_DATA_Y]);
                		
-               		if (accel >= 8) {
+               		if (accel >= mNudgeValue) {
                			mPaddleX = 0;
-               		} else if (accel <= -8) {
+               		} else if (accel <= -mNudgeValue) {
                			mPaddleX = (int)mWidth-mPaddleWidth;
                		} else
-               			mPaddleX -= (int)(values[SensorManager.RAW_DATA_Y] * 3.0f);
+               			mPaddleX -= accel * mAccelMultiplier;
                		if (mPaddleX < 0)
                			mPaddleX = 0;
                		if (mPaddleX > ((int)mWidth-mPaddleWidth))

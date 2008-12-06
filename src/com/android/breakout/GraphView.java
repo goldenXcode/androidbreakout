@@ -88,7 +88,6 @@ public class GraphView extends View implements SensorListener
         synchronized (this) {
             if (mBitmap != null) {
                 final Paint paint = mPaint;
-                final Path path = mPath;
 
 //                canvas.drawBitmap(mBitmap, 0, 0, null);
                 mBackground.draw(canvas);
@@ -109,8 +108,6 @@ public class GraphView extends View implements SensorListener
         //Log.d(TAG, "sensor: " + sensor + ", x: " + values[0] + ", y: " + values[1] + ", z: " + values[2]);
         synchronized (this) {
             if (mBitmap != null) {
-                final Canvas canvas = mCanvas;
-                final Paint paint = mPaint;
                	if (sensor == SensorManager.SENSOR_ACCELEROMETER) {
                		int accel = (int)(values[SensorManager.RAW_DATA_Y]);
                		

@@ -5,9 +5,7 @@ package com.android.breakout;
 
 import android.graphics.Rect;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.graphics.drawable.*;
 
 /**
@@ -24,7 +22,7 @@ public class Paddle {
 	private Rect mBounds = new Rect();
     private GradientDrawable mDrawable;
 
-	public void Paddle() {
+	public Paddle() {
 		mX = 0;
 		mY = 0;
 		
@@ -41,7 +39,7 @@ public class Paddle {
 	
 	}
 	
-	public void Paddle(int x, int y) {
+	public Paddle(final int x, final int y) {
 		mX = x;
 		mY = y;
 
@@ -51,7 +49,7 @@ public class Paddle {
 		mBounds.set(0, 0, 0, 0);
 	}
 
-	public void Paddle(int x, int y, int vx, int vy, int w, int h, Rect bounds) {
+	public Paddle(int x, int y, int vx, int vy, int w, int h, Rect bounds) {
 		mX = x;
 		mY = y;
 		mVx = vx;

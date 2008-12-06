@@ -1,7 +1,6 @@
 package com.android.breakout;
 
 import android.app.Activity;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.content.res.Configuration;

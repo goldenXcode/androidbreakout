@@ -37,6 +37,8 @@ public class GraphView extends View implements SensorListener
     private final int mNudgeValue = 8;
     private GradientDrawable mPaddle;
     private GradientDrawable mBackground;
+    private Point	mBallPos = new Point();
+    private Point	mBallVel = new Point();
     
     public GraphView(Context context) {
         super(context);
@@ -51,11 +53,17 @@ public class GraphView extends View implements SensorListener
         mRect.set(-0.5f, -0.5f, 0.5f, 0.5f);
         mPath.arcTo(mRect, 0, 180);
         
+        mBallPos.x = 160;
+        mBallPos.y = 120;
+        
+        mBallVel.x = 3;
+        mBallVel.y = 2;
+        
         mPaddle = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
                 	new int[] { 0xFF0040FF, 0xFFFFFFFF, 0xFF002080 });
         mPaddle.setShape(GradientDrawable.LINEAR_GRADIENT);
         mPaddle.setCornerRadius(3);
-        mPaddle.setStroke(2, 0xFF000000);
+        mPaddle.setStroke(1, 0xFF000000);
         
         mBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
         				new int[] { 0xFF000040, 0xFFFF8060, 0xFFFFFFFF });
@@ -85,6 +93,8 @@ public class GraphView extends View implements SensorListener
 //                canvas.drawBitmap(mBitmap, 0, 0, null);
                 mBackground.draw(canvas);
                 drawPaddle(canvas, paint);
+                paint.setColor(0xFF00FF00);
+                canvas.drawCircle(mBallPos.x, mBallPos.y, 8, paint);
             } 
         }
     }
@@ -114,6 +124,34 @@ public class GraphView extends View implements SensorListener
                			mPaddleX = 0;
                		if (mPaddleX > ((int)mWidth-mPaddleWidth))
                			mPaddleX = (int)mWidth - mPaddleWidth;
+               		
+               		mBallPos.x += mBallVel.x;
+               		mBallPos.y += mBallVel.y;
+               		
+               		if(mBallPos.x < 0 || mBallPos.x > mWidth) {
+               			mBallVel.x = -mBallVel.x;
+               			mBallPos.x += mBallVel.x;
+               		}
+               		
+               		if(mBallPos.y < 0) {
+               			mBallVel.y = -mBallVel.y;
+               			mBallPos.y += mBallVel.y;
+               		} else if (mBallPos.y >= mHeight) {
+               	        mBallPos.x = 160;
+               	        mBallPos.y = 120;
+               	        
+               	        mBallVel.x = 3;
+               	        mBallVel.y = 2;
+               		}
+               		
+               		if(mBallVel.y > 0 && (mBallPos.y < mHeight - 5) &&
+               				mBallPos.y > mPaddleY && mBallPos.x > mPaddleX &&
+               				mBallPos.x < mPaddleX + mPaddleWidth) {
+               			
+               			mBallVel.y = -(mBallVel.y + 1);
+               			mBallPos.y = (mPaddleY - 8);
+               			mBallVel.x++;
+               		}
                	}
                 invalidate();
             }

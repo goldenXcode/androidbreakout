@@ -27,17 +27,16 @@ public class GraphView extends View implements SensorListener
     private Path    mPath = new Path();
     private RectF   mRect = new RectF();
     private int     mColors[] = new int[3*2];
-    private float   mSpeed = 1.0f;
     private float   mWidth;
     private float   mHeight;
     private int		mPaddleX = 0;
     private int		mPaddleY = 0;
     private int		mPaddleWidth = 80;
     private int		mPaddleHeight = 15;
-    private int		mPaddleColor = Color.argb(255, 64, 64, 128);
     private final int mAccelMultiplier = 3;
     private final int mNudgeValue = 8;
-    private GradientDrawable mDrawable;
+    private GradientDrawable mPaddle;
+    private GradientDrawable mBackground;
     
     public GraphView(Context context) {
         super(context);
@@ -52,12 +51,15 @@ public class GraphView extends View implements SensorListener
         mRect.set(-0.5f, -0.5f, 0.5f, 0.5f);
         mPath.arcTo(mRect, 0, 180);
         
-        mDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[] { 0xFF0040FF, 0xFFFF8060,
-                    0xFF002080 });
-        mDrawable.setShape(GradientDrawable.LINEAR_GRADIENT);
-        mDrawable.setCornerRadius(3);
-        mDrawable.setStroke(2, 0xFF000000);
+        mPaddle = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+                	new int[] { 0xFF0040FF, 0xFFFFFFFF, 0xFF002080 });
+        mPaddle.setShape(GradientDrawable.LINEAR_GRADIENT);
+        mPaddle.setCornerRadius(3);
+        mPaddle.setStroke(2, 0xFF000000);
+        
+        mBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+        				new int[] { 0xFF000040, 0xFFFF8060, 0xFFFFFFFF });
+        mBackground.setShape(GradientDrawable.LINEAR_GRADIENT);
     }
     
     @Override
@@ -69,6 +71,7 @@ public class GraphView extends View implements SensorListener
         mHeight = h;
         mPaddleY = h - mPaddleHeight - 2;
         mPaddleX = (w >> 1) - (mPaddleWidth >> 1);
+        mBackground.setBounds(0, 0, (int)mWidth, (int)mHeight);
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
@@ -79,7 +82,8 @@ public class GraphView extends View implements SensorListener
                 final Paint paint = mPaint;
                 final Path path = mPath;
 
-                canvas.drawBitmap(mBitmap, 0, 0, null);
+//                canvas.drawBitmap(mBitmap, 0, 0, null);
+                mBackground.draw(canvas);
                 drawPaddle(canvas, paint);
             } 
         }
@@ -87,8 +91,8 @@ public class GraphView extends View implements SensorListener
     
     private void drawPaddle(Canvas canvas, Paint paint) {
 //        paint.setColor(mPaddleColor);
-        mDrawable.setBounds(mPaddleX, mPaddleY, mPaddleX + mPaddleWidth, mPaddleY + mPaddleHeight);
-        mDrawable.draw(canvas);
+    	mPaddle.setBounds(mPaddleX, mPaddleY, mPaddleX + mPaddleWidth, mPaddleY + mPaddleHeight);
+    	mPaddle.draw(canvas);
     }
 
     public void onSensorChanged(int sensor, float[] values) {

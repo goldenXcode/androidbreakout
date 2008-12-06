@@ -33,7 +33,7 @@ public class GraphView extends View implements SensorListener
     private int		mPaddleY = 0;
     private int		mPaddleWidth = 80;
     private int		mPaddleHeight = 15;
-    private final int mAccelMultiplier = 3;
+    private final int mAccelMultiplier = 4;
     private final int mNudgeValue = 8;
     private GradientDrawable mPaddle;
     private GradientDrawable mBackground;

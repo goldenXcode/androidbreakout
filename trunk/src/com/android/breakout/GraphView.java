@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.graphics.Rect;
 import android.graphics.drawable.*;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
@@ -27,15 +28,14 @@ public class GraphView extends View implements SensorListener
     private Path    mPath = new Path();
     private RectF   mRect = new RectF();
     private int     mColors[] = new int[3*2];
-    private float   mWidth;
+    private int		mWidth;
     private float   mHeight;
-    private int		mPaddleX = 0;
-    private int		mPaddleY = 0;
     private int		mPaddleWidth = 80;
     private int		mPaddleHeight = 15;
     private final int mAccelMultiplier = 4;
     private final int mNudgeValue = 8;
-    private GradientDrawable mPaddle;
+//    private GradientDrawable mPaddle;
+    private Paddle 	mPaddle;
     private GradientDrawable mBackground;
     private Point	mBallPos = new Point();
     private Point	mBallVel = new Point();
@@ -59,11 +59,7 @@ public class GraphView extends View implements SensorListener
         mBallVel.x = 3;
         mBallVel.y = 2;
         
-        mPaddle = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-                	new int[] { 0xFF0040FF, 0xFFFFFFFF, 0xFF002080 });
-        mPaddle.setShape(GradientDrawable.LINEAR_GRADIENT);
-        mPaddle.setCornerRadius(3);
-        mPaddle.setStroke(1, 0xFF000000);
+        mPaddle = new Paddle();
         
         mBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
         				new int[] { 0xFF000040, 0xFFFF8060, 0xFFFFFFFF });
@@ -77,8 +73,9 @@ public class GraphView extends View implements SensorListener
         mCanvas.drawColor(0xFFFFFFFF);
         mWidth = w;
         mHeight = h;
-        mPaddleY = h - mPaddleHeight - 2;
-        mPaddleX = (w >> 1) - (mPaddleWidth >> 1);
+        mPaddle.setPosition((w >> 1) - (mPaddleWidth >> 1), h - mPaddleHeight - 2);
+        Rect bounds = new Rect(0,0,(int)mWidth,(int)mHeight);
+        mPaddle.setBounds(bounds);
         mBackground.setBounds(0, 0, (int)mWidth, (int)mHeight);
         super.onSizeChanged(w, h, oldw, oldh);
     }
@@ -88,10 +85,8 @@ public class GraphView extends View implements SensorListener
         synchronized (this) {
             if (mBitmap != null) {
                 final Paint paint = mPaint;
-
-//                canvas.drawBitmap(mBitmap, 0, 0, null);
                 mBackground.draw(canvas);
-                drawPaddle(canvas, paint);
+                mPaddle.draw(canvas);
                 paint.setColor(0xFF00FF00);
                 canvas.drawCircle(mBallPos.x, mBallPos.y, 8, paint);
             } 
@@ -100,8 +95,8 @@ public class GraphView extends View implements SensorListener
     
     private void drawPaddle(Canvas canvas, Paint paint) {
 //        paint.setColor(mPaddleColor);
-    	mPaddle.setBounds(mPaddleX, mPaddleY, mPaddleX + mPaddleWidth, mPaddleY + mPaddleHeight);
-    	mPaddle.draw(canvas);
+//    	mPaddle.setBounds(mPaddleX, mPaddleY, mPaddleX + mPaddleWidth, mPaddleY + mPaddleHeight);
+//    	mPaddle.draw(canvas);
     }
 
     public void onSensorChanged(int sensor, float[] values) {
@@ -112,19 +107,17 @@ public class GraphView extends View implements SensorListener
                		int accel = (int)(values[SensorManager.RAW_DATA_Y]);
                		
                		if (accel >= mNudgeValue) {
-               			mPaddleX = 0;
+               			mPaddle.setVelocity(-mWidth, 0);
                		} else if (accel <= -mNudgeValue) {
-               			mPaddleX = (int)mWidth-mPaddleWidth;
+               			mPaddle.setVelocity(mWidth, 0);
                		} else
-               			mPaddleX -= accel * mAccelMultiplier;
-               		if (mPaddleX < 0)
-               			mPaddleX = 0;
-               		if (mPaddleX > ((int)mWidth-mPaddleWidth))
-               			mPaddleX = (int)mWidth - mPaddleWidth;
+               			mPaddle.setVelocity(accel * -mAccelMultiplier, 0);
+               		mPaddle.update();
                		
                		mBallPos.x += mBallVel.x;
                		mBallPos.y += mBallVel.y;
                		
+               		Point p = mPaddle.getPosition();
                		if(mBallPos.x < 0 || mBallPos.x > mWidth) {
                			mBallVel.x = -mBallVel.x;
                			mBallPos.x += mBallVel.x;
@@ -142,13 +135,14 @@ public class GraphView extends View implements SensorListener
                		}
                		
                		if(mBallVel.y > 0 && (mBallPos.y < mHeight - 5) &&
-               				mBallPos.y > mPaddleY && mBallPos.x > mPaddleX &&
-               				mBallPos.x < mPaddleX + mPaddleWidth) {
+               				mBallPos.y > p.y && mBallPos.x > p.x &&
+               				mBallPos.x < p.x + mPaddleWidth) {
                			
                			mBallVel.y = -(mBallVel.y + 1);
-               			mBallPos.y = (mPaddleY - 8);
+               			mBallPos.y = (p.y - 8);
                			mBallVel.x++;
                		}
+//               		mPaddle.setPosition(mPaddleX, mPaddleY);
                	}
                 invalidate();
             }

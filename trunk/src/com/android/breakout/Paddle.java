@@ -17,8 +17,8 @@ public class Paddle {
 	private int mY = 0;
 	private int mVx = 0;
 	private int mVy = 0;
-	private int mWidth = 80;
-	private int mHeight = 15;
+	private int mWidth = 60;
+	private int mHeight = 12;
 	private Rect mBounds = new Rect();
     private GradientDrawable mDrawable;
 
@@ -62,11 +62,6 @@ public class Paddle {
 	public void setPosition(int x, int y) {
 		mX = x;
 		mY = y;
-		
-		if (mX < mBounds.left)
-			mX = mBounds.left;
-		if ((mX + mWidth) > mBounds.right)
-			mX = mBounds.right - mWidth;
 	}
 	
 	public void setVelocity(int vx, int vy) {
@@ -97,10 +92,18 @@ public class Paddle {
 		return p;
 	}
 	
-	public void draw(Canvas canvas, Paint paint) {
+	public void draw(Canvas canvas) {
 		mDrawable.setBounds(mX, mY, 
 				mX + mWidth, mY + mHeight);
 		mDrawable.draw(canvas);
-		
+	}
+	
+	public void update() {
+		mX += mVx;
+
+		if (mX < mBounds.left)
+			mX = mBounds.left;
+		if ((mX + mWidth) > mBounds.right)
+			mX = mBounds.right - mWidth;
 	}
 }

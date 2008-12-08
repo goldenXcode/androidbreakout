@@ -93,12 +93,6 @@ public class GraphView extends View implements SensorListener
         }
     }
     
-    private void drawPaddle(Canvas canvas, Paint paint) {
-//        paint.setColor(mPaddleColor);
-//    	mPaddle.setBounds(mPaddleX, mPaddleY, mPaddleX + mPaddleWidth, mPaddleY + mPaddleHeight);
-//    	mPaddle.draw(canvas);
-    }
-
     public void onSensorChanged(int sensor, float[] values) {
         //Log.d(TAG, "sensor: " + sensor + ", x: " + values[0] + ", y: " + values[1] + ", z: " + values[2]);
         synchronized (this) {

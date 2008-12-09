@@ -30,8 +30,8 @@ public class GraphView extends View implements SensorListener
     private int     mColors[] = new int[3*2];
     private int		mWidth;
     private float   mHeight;
-    private int		mPaddleWidth = 80;
-    private int		mPaddleHeight = 15;
+    private int		mPaddleWidth = 70;
+    private int		mPaddleHeight = 12;
     private final int mAccelMultiplier = 4;
     private final int mNudgeValue = 8;
 //    private GradientDrawable mPaddle;
@@ -62,7 +62,7 @@ public class GraphView extends View implements SensorListener
         mPaddle = new Paddle();
         
         mBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-        				new int[] { 0xFF000040, 0xFFFF8060, 0xFFFFFFFF });
+        				new int[] { 0xFF000040, 0xFF000000, 0xFF400000 });
         mBackground.setShape(GradientDrawable.LINEAR_GRADIENT);
     }
     
@@ -76,6 +76,7 @@ public class GraphView extends View implements SensorListener
         mPaddle.setPosition((w >> 1) - (mPaddleWidth >> 1), h - mPaddleHeight - 2);
         Rect bounds = new Rect(0,0,(int)mWidth,(int)mHeight);
         mPaddle.setBounds(bounds);
+        mPaddle.setDimensions(mPaddleWidth, mPaddleHeight);
         mBackground.setBounds(0, 0, (int)mWidth, (int)mHeight);
         super.onSizeChanged(w, h, oldw, oldh);
     }

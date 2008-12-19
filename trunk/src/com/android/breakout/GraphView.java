@@ -32,7 +32,7 @@ public class GraphView extends View implements SensorListener
     private float   mHeight;
     private int		mPaddleWidth = 70;
     private int		mPaddleHeight = 12;
-    private final int mAccelMultiplier = 4;
+    private final int mAccelMultiplier = 5;
     private final int mNudgeValue = 8;
 //    private GradientDrawable mPaddle;
     private Paddle 	mPaddle;
@@ -106,7 +106,9 @@ public class GraphView extends View implements SensorListener
                		} else if (accel <= -mNudgeValue) {
                			mPaddle.setVelocity(mWidth, 0);
                		} else
-               			mPaddle.setVelocity(accel * -mAccelMultiplier, 0);
+               		{
+               			mPaddle.setVelocity((int)(values[SensorManager.RAW_DATA_Y] * -mAccelMultiplier), 0);
+               		}
                		mPaddle.update();
                		
                		mBallPos.x += mBallVel.x;

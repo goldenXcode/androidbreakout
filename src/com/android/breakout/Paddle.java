@@ -16,7 +16,7 @@ public class Paddle {
 	private int mY = 0;
 	private int mVx = 0;
 	private int mVy = 0;
-	private int mWidth = 60;
+	private int mWidth = 80;
 	private int mHeight = 12;
 	private Rect mBounds = new Rect();
     private GradientDrawable mDrawable;

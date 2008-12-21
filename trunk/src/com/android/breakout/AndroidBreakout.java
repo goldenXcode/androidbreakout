@@ -5,6 +5,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.content.res.Configuration;
 import android.view.Window;
+import android.view.WindowManager;
 
 public class AndroidBreakout extends Activity {
     private GraphView mGraphView;
@@ -15,6 +16,8 @@ public class AndroidBreakout extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE); 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mGraphView = new GraphView(this);
         setContentView(mGraphView);

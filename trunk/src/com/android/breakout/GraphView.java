@@ -30,15 +30,19 @@ public class GraphView extends View implements SensorListener
     private int     mColors[] = new int[3*2];
     private int		mWidth;
     private float   mHeight;
-    private int		mPaddleWidth = 70;
+    private int		mPaddleWidth = 80;
     private int		mPaddleHeight = 12;
     private final int mAccelMultiplier = 5;
     private final int mNudgeValue = 8;
-//    private GradientDrawable mPaddle;
     private Paddle 	mPaddle;
     private GradientDrawable mBackground;
     private Point	mBallPos = new Point();
     private Point	mBallVel = new Point();
+    private float	mSin[]  = {-0.5f, -0.707106781f, -0.866025404f, -0.965925826f, -1.0f,
+    						   -1.0f, -0.965925826f, -0.866025404f, -0.707106781f, -0.5f};
+    private float 	mCos[]	= {-0.866025404f, -0.707106781f, -0.5f, -0.258819045f, 0.0f,
+    						   0.0f, 0.258819045f, 0.5f, 0.707106781f, 0.866025404f};
+    private float	mVelMag = 4.0f;
     
     public GraphView(Context context) {
         super(context);
@@ -53,11 +57,11 @@ public class GraphView extends View implements SensorListener
         mRect.set(-0.5f, -0.5f, 0.5f, 0.5f);
         mPath.arcTo(mRect, 0, 180);
         
-        mBallPos.x = 160;
+        mBallPos.x = 240;
         mBallPos.y = 120;
         
-        mBallVel.x = 3;
-        mBallVel.y = 2;
+        mBallVel.x = mVelMag * mCos[6];
+        mBallVel.y = mVelMag * mSin[6];
         
         mPaddle = new Paddle();
         
@@ -124,28 +128,43 @@ public class GraphView extends View implements SensorListener
                			mBallVel.y = -mBallVel.y;
                			mBallPos.y += mBallVel.y;
                		} else if (mBallPos.y >= mHeight) {
-               	        mBallPos.x = 160;
+               	        mBallPos.x = 240;
                	        mBallPos.y = 120;
                	        
-               	        mBallVel.x = 3;
-               	        mBallVel.y = 2;
+               	        mVelMag = 4.0f;
+               	        
+               	        mBallVel.x = mVelMag * mCos[6];
+               	        mBallVel.y = mVelMag * mSin[6];
                		}
                		
                		if(mBallVel.y > 0 && (mBallPos.y < mHeight - 5) &&
                				mBallPos.y > p.y && mBallPos.x > p.x &&
                				mBallPos.x < p.x + mPaddleWidth) {
-               			
-               			mBallVel.y = -(mBallVel.y + 1);
-               			mBallPos.y = (p.y - 8);
-               			mBallVel.x++;
+               			float divider = (float)mPaddleWidth/8.0f;
+               			float sector = (float)p.x+divider;
+               			boolean found = false;
+               			for(int i = 0; !found && i < 8; i++) {
+               				if(mBallPos.x <= sector){
+               					mBallVel.y = mVelMag * mSin[i+1];
+               					mBallVel.x = mVelMag * mCos[i+1];
+               					found = true;
+               				}
+               				sector += divider;
+               			}
+               			if(mVelMag < 10.0f)
+               				mVelMag += 1.0f;
                		}
-//               		mPaddle.setPosition(mPaddleX, mPaddleY);
                	}
                 invalidate();
             }
         }
     }
 
+    private boolean testBallPaddleCollision(float bx, float by, float px, float py) {
+    	
+    	return false;
+    }
+    
     public void onAccuracyChanged(int sensor, int accuracy) {
         // TODO Auto-generated method stub
         

@@ -92,7 +92,7 @@ public class GraphView extends View implements SensorListener
                 final Paint paint = mPaint;
                 mBackground.draw(canvas);
                 mPaddle.draw(canvas);
-                paint.setColor(0xFF00FF00);
+                paint.setColor(0xFFFFFFFF);
                 canvas.drawCircle(mBallPos.x, mBallPos.y, 8, paint);
             } 
         }

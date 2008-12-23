@@ -15,6 +15,7 @@ import android.graphics.drawable.*;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.view.View;
+import java.util.Random;
 
 /**
  * @author lithium
@@ -60,8 +61,10 @@ public class GraphView extends View implements SensorListener
         mBallPos.x = 240;
         mBallPos.y = 120;
         
-        mBallVel.x = mVelMag * mCos[6];
-        mBallVel.y = mVelMag * mSin[6];
+        Random rand = new Random();
+        int i = rand.nextInt(10);
+        mBallVel.x = mVelMag * mCos[i];
+        mBallVel.y = mVelMag * mSin[i];
         
         mPaddle = new Paddle();
         
@@ -133,8 +136,10 @@ public class GraphView extends View implements SensorListener
                	        
                	        mVelMag = 4.0f;
                	        
-               	        mBallVel.x = mVelMag * mCos[6];
-               	        mBallVel.y = mVelMag * mSin[6];
+               	        Random rand = new Random();
+               	        int i = rand.nextInt(10);
+               	        mBallVel.x = mVelMag * mCos[i];
+               	        mBallVel.y = mVelMag * mSin[i];
                		}
                		
                		if(mBallVel.y > 0 && (mBallPos.y < mHeight - 5) &&

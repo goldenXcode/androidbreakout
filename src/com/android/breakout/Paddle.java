@@ -33,8 +33,8 @@ public class Paddle {
 		mDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
             	new int[] { 0xFF0040FF, 0xFFFFFFFF, 0xFF002080 });
 		mDrawable.setShape(GradientDrawable.LINEAR_GRADIENT);
-		mDrawable.setCornerRadius(3);
-		mDrawable.setStroke(1, 0xFF000000);
+		mDrawable.setCornerRadius(4);
+		mDrawable.setStroke(2, 0xFF000000);
 	
 	}
 	

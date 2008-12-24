@@ -37,6 +37,7 @@ public class GraphView extends View implements SensorListener
     private final int mNudgeValue = 8;
     private Paddle 	mPaddle;
     private GradientDrawable mBackground;
+    private GradientDrawable mBall;
     private Point	mBallPos = new Point();
     private Point	mBallVel = new Point();
     private float	mSin[]  = {-0.5f, -0.707106781f, -0.866025404f, -0.965925826f, -1.0f,
@@ -69,8 +70,12 @@ public class GraphView extends View implements SensorListener
         mPaddle = new Paddle();
         
         mBackground = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-        				new int[] { 0xFF000040, 0xFF000000, 0xFF400000 });
+        				new int[] { 0xFF0094BF, 0xFFF0F0F0 });
         mBackground.setShape(GradientDrawable.LINEAR_GRADIENT);
+        
+        mBall = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+        				new int[] { 0xFFFFFF00, 0xFFFF7200 });
+        mBall.setShape(GradientDrawable.OVAL);
     }
     
     @Override
@@ -95,8 +100,13 @@ public class GraphView extends View implements SensorListener
                 final Paint paint = mPaint;
                 mBackground.draw(canvas);
                 mPaddle.draw(canvas);
-                paint.setColor(0xFFFFFFFF);
-                canvas.drawCircle(mBallPos.x, mBallPos.y, 8, paint);
+                paint.setStyle(Paint.Style.FILL_AND_STROKE);
+                paint.setColor(0xFFFF7200);
+                paint.setStrokeWidth(1);
+                mBall.setBounds((int)mBallPos.x-8, (int)mBallPos.y-8, (int)mBallPos.x+8, (int)mBallPos.y+8);
+                mBall.setStroke(1, 0xFF000000);
+                mBall.draw(canvas);
+//                canvas.drawCircle(mBallPos.x, mBallPos.y, 8, paint);
             } 
         }
     }

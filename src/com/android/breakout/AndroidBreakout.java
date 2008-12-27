@@ -3,12 +3,15 @@ package com.android.breakout;
 import android.app.Activity;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.content.res.Configuration;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class AndroidBreakout extends Activity {
-    private GraphView mGraphView;
+public class AndroidBreakout extends Activity implements Runnable {
+
+	private GraphView mGraphView;
     private SensorManager mSensorManager;
 
     /** Called when the activity is first created. */
@@ -21,6 +24,8 @@ public class AndroidBreakout extends Activity {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mGraphView = new GraphView(this);
         setContentView(mGraphView);
+        Thread thread = new Thread(this);
+        thread.start();
     }
 
     @Override
@@ -28,7 +33,6 @@ public class AndroidBreakout extends Activity {
         super.onResume();
         mSensorManager.registerListener(mGraphView, 
                 SensorManager.SENSOR_ACCELEROMETER,
-//                SensorManager.SENSOR_ORIENTATION | 
                 SensorManager.SENSOR_DELAY_FASTEST);
     }
     
@@ -42,27 +46,23 @@ public class AndroidBreakout extends Activity {
 	public void onConfigurationChanged(Configuration newConfig) {
     	super.onConfigurationChanged(newConfig);
     }
-/*
-    public void onSensorChanged(int sensor, float[] values) {
-        //Log.d(TAG, "sensor: " + sensor + ", x: " + values[0] + ", y: " + values[1] + ", z: " + values[2]);
-        synchronized (this) {
-            if (mBitmap != null) {
-                final Canvas canvas = mCanvas;
-                final Paint paint = mPaint;
-               	if (sensor == SensorManager.SENSOR_ACCELEROMETER) {
-               		mPaddleX += (int)(values[0] * 2.0f);
-               		if (mPaddleX < 0)
-               			mPaddleX = 0;
-               		if (mPaddleX > ((int)mWidth-mPaddleWidth))
-               			mPaddleX = (int)mWidth - mPaddleWidth;
-               	}
-                invalidate();
-            }
-        }
+    
+    public void run() {
+    	while(true) {
+   			handler.sendEmptyMessage(0);
+   			try {
+				Thread.sleep(17);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
     }
-*/
-    public void onAccuracyChanged(int sensor, int accuracy) {
-        // TODO Auto-generated method stub
-        
-    }
+    
+    private Handler handler = new Handler() {
+    	@Override
+    	public void handleMessage(Message msg) {
+    		mGraphView.invalidate();
+    	}
+    };
 }

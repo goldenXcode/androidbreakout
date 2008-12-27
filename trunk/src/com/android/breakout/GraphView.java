@@ -32,7 +32,7 @@ public class GraphView extends View implements SensorListener
     private int		mWidth;
     private float   mHeight;
     private int		mPaddleWidth = 80;
-    private int		mPaddleHeight = 12;
+    private int		mPaddleHeight = 16;
     private final int mAccelMultiplier = 5;
     private final int mNudgeValue = 8;
     private Paddle 	mPaddle;
@@ -170,7 +170,6 @@ public class GraphView extends View implements SensorListener
                				mVelMag += 1.0f;
                		}
                	}
-                invalidate();
             }
         }
     }

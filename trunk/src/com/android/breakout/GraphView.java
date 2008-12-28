@@ -14,6 +14,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.*;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import java.util.Random;
 
@@ -21,7 +23,7 @@ import java.util.Random;
  * @author lithium
  *
  */
-public class GraphView extends View implements SensorListener
+public class GraphView extends View implements SensorListener, Runnable
 {
     private Bitmap  mBitmap;
     private Paint   mPaint = new Paint();
@@ -76,6 +78,9 @@ public class GraphView extends View implements SensorListener
         mBall = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
         				new int[] { 0xFFFFFF00, 0xFFFF7200 });
         mBall.setShape(GradientDrawable.OVAL);
+
+        Thread thread = new Thread(this);
+        thread.start();
     }
     
     @Override
@@ -126,49 +131,6 @@ public class GraphView extends View implements SensorListener
                		{
                			mPaddle.setVelocity((int)(values[SensorManager.RAW_DATA_Y] * -mAccelMultiplier), 0);
                		}
-               		mPaddle.update();
-               		
-               		mBallPos.x += mBallVel.x;
-               		mBallPos.y += mBallVel.y;
-               		
-               		Point p = mPaddle.getPosition();
-               		if(mBallPos.x < 0 || mBallPos.x > mWidth) {
-               			mBallVel.x = -mBallVel.x;
-               			mBallPos.x += mBallVel.x;
-               		}
-               		
-               		if(mBallPos.y < 0) {
-               			mBallVel.y = -mBallVel.y;
-               			mBallPos.y += mBallVel.y;
-               		} else if (mBallPos.y >= mHeight) {
-               	        mBallPos.x = 240;
-               	        mBallPos.y = 120;
-               	        
-               	        mVelMag = 4.0f;
-               	        
-               	        Random rand = new Random();
-               	        int i = rand.nextInt(10);
-               	        mBallVel.x = mVelMag * mCos[i];
-               	        mBallVel.y = mVelMag * mSin[i];
-               		}
-               		
-               		if(mBallVel.y > 0 && (mBallPos.y < mHeight - 5) &&
-               				mBallPos.y > p.y && mBallPos.x > p.x &&
-               				mBallPos.x < p.x + mPaddleWidth) {
-               			float divider = (float)mPaddleWidth/8.0f;
-               			float sector = (float)p.x+divider;
-               			boolean found = false;
-               			for(int i = 0; !found && i < 8; i++) {
-               				if(mBallPos.x <= sector){
-               					mBallVel.y = mVelMag * mSin[i+1];
-               					mBallVel.x = mVelMag * mCos[i+1];
-               					found = true;
-               				}
-               				sector += divider;
-               			}
-               			if(mVelMag < 10.0f)
-               				mVelMag += 1.0f;
-               		}
                	}
             }
         }
@@ -179,8 +141,70 @@ public class GraphView extends View implements SensorListener
     	return false;
     }
     
+    public void run() {
+    	while(true) {
+   			handler.sendEmptyMessage(0);
+   			try {
+				Thread.sleep(20);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+    }
+    
     public void onAccuracyChanged(int sensor, int accuracy) {
         // TODO Auto-generated method stub
         
     }
+    private Handler handler = new Handler() {
+    	@Override
+    	public void handleMessage(Message msg) {
+       		mPaddle.update();
+       		
+       		mBallPos.x += mBallVel.x;
+       		mBallPos.y += mBallVel.y;
+       		
+       		Point p = mPaddle.getPosition();
+       		if(mBallPos.x < 0 || mBallPos.x > mWidth) {
+       			mBallVel.x = -mBallVel.x;
+       			mBallPos.x += mBallVel.x;
+       		}
+       		
+       		if(mBallPos.y < 0) {
+       			mBallVel.y = -mBallVel.y;
+       			mBallPos.y += mBallVel.y;
+       		} else if (mBallPos.y >= mHeight) {
+       	        mBallPos.x = 240;
+       	        mBallPos.y = 120;
+       	        
+       	        mVelMag = 4.0f;
+       	        
+       	        Random rand = new Random();
+       	        int i = rand.nextInt(10);
+       	        mBallVel.x = mVelMag * mCos[i];
+       	        mBallVel.y = mVelMag * mSin[i];
+       		}
+       		
+       		if(mBallVel.y > 0 && (mBallPos.y < mHeight - 5) &&
+       				mBallPos.y > p.y && mBallPos.x > p.x &&
+       				mBallPos.x < p.x + mPaddleWidth) {
+       			float divider = (float)mPaddleWidth/10.0f;
+       			float sector = (float)p.x+divider;
+       			boolean found = false;
+       			for(int i = 0; !found && i < 10; i++) {
+       				if(mBallPos.x <= sector){
+       					mBallVel.y = mVelMag * mSin[i];
+       					mBallVel.x = mVelMag * mCos[i];
+       					found = true;
+       				}
+       				sector += divider;
+       			}
+       			if(mVelMag < 10.0f)
+       				mVelMag += 1.0f;
+       		}
+    		invalidate();
+    	}
+    };
 }
+

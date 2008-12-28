@@ -9,7 +9,7 @@ import android.content.res.Configuration;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class AndroidBreakout extends Activity implements Runnable {
+public class AndroidBreakout extends Activity {
 
 	private GraphView mGraphView;
     private SensorManager mSensorManager;
@@ -24,8 +24,6 @@ public class AndroidBreakout extends Activity implements Runnable {
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mGraphView = new GraphView(this);
         setContentView(mGraphView);
-        Thread thread = new Thread(this);
-        thread.start();
     }
 
     @Override
@@ -46,23 +44,4 @@ public class AndroidBreakout extends Activity implements Runnable {
 	public void onConfigurationChanged(Configuration newConfig) {
     	super.onConfigurationChanged(newConfig);
     }
-    
-    public void run() {
-    	while(true) {
-   			handler.sendEmptyMessage(0);
-   			try {
-				Thread.sleep(17);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    	}
-    }
-    
-    private Handler handler = new Handler() {
-    	@Override
-    	public void handleMessage(Message msg) {
-    		mGraphView.invalidate();
-    	}
-    };
 }

@@ -12,6 +12,7 @@ import android.graphics.drawable.GradientDrawable;
 public class GameManager {
     private int		mPaddleWidth = 80;
     private int		mPaddleHeight = 16;
+    private final float mAccelMultiplier = 5.0f;
     private int mNudgeValue = 8;
     private Paddle 	mPaddle;
     private GradientDrawable mBackground;
@@ -27,6 +28,7 @@ public class GameManager {
     public final int	INITIAL_PADDLE_HEIGHT = 16;
     public final int	INITIAL_PADDLE_WIDTH = 80;
     public final float	INITIAL_BALL_VELOCITY = 6.0f;
+    public final float	ACCELEROMETER_MULTIPLIER = 5.0f;
     
 }
 

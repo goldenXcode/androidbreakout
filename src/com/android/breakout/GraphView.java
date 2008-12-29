@@ -35,6 +35,7 @@ public class GraphView extends View implements SensorListener, Runnable
     private float   mHeight;
     private int		mPaddleWidth = 80;
     private int		mPaddleHeight = 16;
+    private final int mAccelMultiplier = 5;
     private final int mNudgeValue = 8;
     private Paddle 	mPaddle;
     private GradientDrawable mBackground;
@@ -146,7 +147,7 @@ public class GraphView extends View implements SensorListener, Runnable
    			try {
 				// allow the thread to sleep a bit and allow other threads to run
    				// 17 milliseconds will allow for a frame rate of about 60 FPS.
-   				Thread.sleep(20);
+   				Thread.sleep(17);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

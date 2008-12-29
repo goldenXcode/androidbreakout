@@ -35,7 +35,6 @@ public class GraphView extends View implements SensorListener, Runnable
     private float   mHeight;
     private int		mPaddleWidth = 80;
     private int		mPaddleHeight = 16;
-    private final int mAccelMultiplier = 5;
     private final int mNudgeValue = 8;
     private Paddle 	mPaddle;
     private GradientDrawable mBackground;
@@ -46,7 +45,7 @@ public class GraphView extends View implements SensorListener, Runnable
     						   -1.0f, -0.965925826f, -0.866025404f, -0.707106781f, -0.5f};
     private float 	mCos[]	= {-0.866025404f, -0.707106781f, -0.5f, -0.258819045f, 0.0f,
     						   0.0f, 0.258819045f, 0.5f, 0.707106781f, 0.866025404f};
-    private float	mVelMag = 4.0f;
+    private float	mVelMag = 6.0f;
     
     public GraphView(Context context) {
         super(context);
@@ -111,13 +110,11 @@ public class GraphView extends View implements SensorListener, Runnable
                 mBall.setBounds((int)mBallPos.x-8, (int)mBallPos.y-8, (int)mBallPos.x+8, (int)mBallPos.y+8);
                 mBall.setStroke(1, 0xFF000000);
                 mBall.draw(canvas);
-//                canvas.drawCircle(mBallPos.x, mBallPos.y, 8, paint);
             } 
         }
     }
     
     public void onSensorChanged(int sensor, float[] values) {
-        //Log.d(TAG, "sensor: " + sensor + ", x: " + values[0] + ", y: " + values[1] + ", z: " + values[2]);
         synchronized (this) {
             if (mBitmap != null) {
                	if (sensor == SensorManager.SENSOR_ACCELEROMETER) {
@@ -141,11 +138,15 @@ public class GraphView extends View implements SensorListener, Runnable
     	return false;
     }
     
+    // this method will execute once thread.start is called.  This method
+    // will notify the handler that it is time to update the game
     public void run() {
     	while(true) {
    			handler.sendEmptyMessage(0);
    			try {
-				Thread.sleep(20);
+				// allow the thread to sleep a bit and allow other threads to run
+   				// 17 milliseconds will allow for a frame rate of about 60 FPS.
+   				Thread.sleep(20);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -153,10 +154,6 @@ public class GraphView extends View implements SensorListener, Runnable
     	}
     }
     
-    public void onAccuracyChanged(int sensor, int accuracy) {
-        // TODO Auto-generated method stub
-        
-    }
     private Handler handler = new Handler() {
     	@Override
     	public void handleMessage(Message msg) {
@@ -178,7 +175,7 @@ public class GraphView extends View implements SensorListener, Runnable
        	        mBallPos.x = 240;
        	        mBallPos.y = 120;
        	        
-       	        mVelMag = 4.0f;
+       	        mVelMag = 6.0f;
        	        
        	        Random rand = new Random();
        	        int i = rand.nextInt(10);
@@ -200,11 +197,17 @@ public class GraphView extends View implements SensorListener, Runnable
        				}
        				sector += divider;
        			}
-       			if(mVelMag < 10.0f)
-       				mVelMag += 1.0f;
+//       			if(mVelMag < 10.0f)
+//       				mVelMag += 1.0f;
        		}
     		invalidate();
     	}
     };
+
+	@Override
+	public void onAccuracyChanged(int arg0, int arg1) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

@@ -21,8 +21,6 @@ package com.android.breakout;
 import android.app.Activity;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.content.res.Configuration;
 import android.view.Window;
 import android.view.WindowManager;

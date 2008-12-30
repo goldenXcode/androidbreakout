@@ -5,8 +5,7 @@
 
     AndroidBreakout is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    the Free Software Foundation version 3 of the License.
 
     AndroidBreakout is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -91,7 +90,7 @@ public class GraphView extends View implements SensorListener, Runnable
         				new int[] { 0xFF0094BF, 0xFFF0F0F0 });
         mBackground.setShape(GradientDrawable.LINEAR_GRADIENT);
         
-        mBall = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+        mBall = new GradientDrawable(GradientDrawable.Orientation.TR_BL,
         				new int[] { 0xFFFFFF00, 0xFFFF7200 });
         mBall.setShape(GradientDrawable.OVAL);
 

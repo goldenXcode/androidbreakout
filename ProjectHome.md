@@ -1,0 +1,3 @@
+A clone of the popular Breakout/Arkanoid type games.  This project is barely in its infancy, but with some hard work and a little elbow grease, it should be a fun and addictive game to play.
+
+Currently only the basic framework has been started with the ability to move a paddle around and attempt to keep the ball bouncing.  Natural progression will be to get the GameManager class going and in charge of the game during its various states.  Any coders, artists, musicians, or anyone interested in the project should contact me @ clark@scheffsblend.com.  I'd be happy to get a team together in hopes of making this a solid game for the Android platform.
